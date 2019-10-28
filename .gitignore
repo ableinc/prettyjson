@@ -1,0 +1,6 @@
+prettyjson.egg-info/**
+build/**
+dist/**
+prettyjson/settings.json
+**/__pycache__/**
+.DS_Store
