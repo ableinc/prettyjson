@@ -1,8 +1,10 @@
-import sys, json, os
+import sys, json, os, getpass
 try:
     from preflight import Preflight
+    from defaults import settings_dir, settings_filename
 except ImportError:
     from prettyjson.preflight import Preflight
+    from prettyjson.defaults import settings_filename, settings_dir
 
 
 class Settings:
@@ -31,41 +33,51 @@ class Settings:
         def json_dump(settings):
             return json.dumps(settings, indent=2, sort_keys=True)
         prev_settings = None
-        if os.path.isfile('./settings.json'):
-            prev_settings = json.loads(open('./settings.json', encoding='utf8').read())
+        if os.path.isfile(settings_filename):
+            prev_settings = json.loads(open(settings_filename, encoding='utf8').read())
             for key, value in self.settings.items():
                 prev_settings[key] = value
         self.settings = json_dump(prev_settings) if prev_settings is not None else json_dump(self.settings)
-        with open('./settings.json', 'w') as settings:
+        with open(settings_filename, 'w') as settings:
             settings.write(self.settings)
 
 
 def getItems(get: bool = False):
-    if not os.path.isfile('./settings.json'):
-        _settings = Preflight()
+    if not os.path.isfile(settings_filename):
         _settings.write_preflight_settings()
         print(f'Settings:\n{_settings.get_preflight_settings()}')
     else:
-        with open('./settings.json', 'r', encoding='utf8') as settings:
+        with open(settings_filename, 'r', encoding='utf8') as settings:
             content = json.dumps(json.loads(settings.read()), indent=2, sort_keys=True)
             if get:
                 return content
             else:
                 print(f'Settings:\n{content}')
+
+
+def resetSettings():
+    try:
+        os.remove(settings_filename)
+    except OSError:
+        pass
     
 
 def help_dialog():
     print(
         '''
-pjsettings [arguments] [options]
+pjsettings [option]
 
 Options         Value
 get             Get current settings
+rm              Reset settings to defaults
+
+pjsettings [arguments]
 
 Arguments       Value
 --app           Google Chrome, Firefox, Safari, etc
 --name          Username for prettyjson
 --os            OSX or Windows
+--keepclose     Do not open files by default (default: False)
 
 Example: pjsettings --app Google Chrome --os OSX --name prettyjsoncreator
          pjsettings get
@@ -84,6 +96,9 @@ def cli():
         sys.exit()
     elif args[0].lower() == 'get':
         getItems()
+        sys.exit()
+    elif args[0].lower() == 'rm':
+        resetSettings()
         sys.exit()
     elif len(args) == 1:
         sys.exit()
