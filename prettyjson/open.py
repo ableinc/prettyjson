@@ -1,4 +1,4 @@
-import subprocess, io, shlex, sys, os.path, os
+import subprocess, io, shlex, sys, os.path, os, json
 try:
     from settings import getItems
 except ImportError:
@@ -8,7 +8,7 @@ except ImportError:
 class OpenPrettyJson:
     def __init__(self, args):
         self._set_defaults(args)
-        self.settings = getItems(True)
+        self.settings = json.loads(getItems(True))
         self._data_check()
     
     def _set_defaults(self, args):
@@ -34,7 +34,7 @@ class OpenPrettyJson:
         try:
             if bool(self.settings['KEEPCLOSE']):
                 return
-            for newfp in self.new_filepaths:
+            for newfp in self.filepath:
                 if self.settings['OS'] == 'darwin':
                     cmd = f'open -a "{self.settings["APP"]}.{self.settings["OS_EXT"]}" {newfp}'
                 else:
