@@ -11,11 +11,11 @@ python3 setup.py install
 2. Help dialog
 
 ```bash
-prettyjson --help
+pj --help
 ```
 
 ```bash
-pjopen --help
+pjdisplay --help
 ```
 
 ```bash
