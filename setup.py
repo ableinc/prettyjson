@@ -13,7 +13,7 @@ setuptools.setup(
     packages=['prettyjson'],
     entry_points='''
         [console_scripts]
-        prettyjson=prettyjson.prettyjson:cli
+        pj=prettyjson.prettyjson:cli
         pjsettings=prettyjson.settings:cli
         pjdisplay=prettyjson.open:cli
     ''',
