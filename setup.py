@@ -7,7 +7,7 @@ with open("readme.md", 'r') as ld:
 setuptools.setup(
     name='prettyjson',
     version=__version__,
-    author='Jaylen A. Douglas',
+    author='Able Inc.',
     description="Pretty Print Json",
     long_description=long_description,
     packages=['prettyjson'],
